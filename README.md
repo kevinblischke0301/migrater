@@ -1,10 +1,10 @@
 # Migrater
 
-This is a leightweight command-line tool to execute migrations from sql-files.
+Migrater is a leightweight command-line tool to perform migrations from sql-files.
 
 ## Usage
 
-The following parameters must be set as environment variables:
+The following parameters must be set as environment variables or inside the file `.env` in the root folder:
 
 **MySQL**:
 
@@ -16,6 +16,4 @@ The following parameters must be set as environment variables:
 - `DB_PASSWORD`: the password of the user
 - `MIGRATION_DIR`: the directory path of the migration files
 
-These can be defined inside a file of name `.env` in the root folder.
-
-Every sql-file inside `MIGRATION_DIR` is executed sequentially in alphabetical order of the file names.
+Every sql-file inside `MIGRATION_DIR` is executed sequentially in alphanumerical order of the file names. Therefore it is recommended to give every file name an ordering prefix.
