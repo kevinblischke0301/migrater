@@ -41,28 +41,42 @@ func main() {
 	}
 
 	db, err := GetDB(&env)
-	AbortIf(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	err = db.Ping()
-	AbortIf(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	entries, err := os.ReadDir(env.MigrationDir)
-	AbortIf(err)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	for _, entry := range entries {
 		info, err := entry.Info()
-		AbortIf(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		file, err := os.Open(fmt.Sprintf("%s/%s", env.MigrationDir, info.Name()))
-		AbortIf(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		content, err := io.ReadAll(file)
-		AbortIf(err)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		queries := strings.Split(string(content), ";")
 		for i := 0; i < len(queries)-1; i++ {
 			_, err = db.Exec(queries[i] + ";")
-			AbortIf(err)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 	}
 
@@ -85,11 +99,5 @@ func GetDB(env *Env) (*sql.DB, error) {
 
 	default:
 		return nil, errors.New(fmt.Sprintf("%s isn't a supported database type", env.DBType))
-	}
-}
-
-func AbortIf(err error) {
-	if err != nil {
-		log.Fatal(err)
 	}
 }
