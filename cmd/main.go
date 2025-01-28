@@ -25,7 +25,10 @@ type Env struct {
 
 func main() {
 	err := godotenv.Load()
-	AbortIf(err)
+	if err != nil && !os.IsNotExist(err) {
+		log.Fatal(err)
+	}
+
 
 	env := Env{
 		DBType:       os.Getenv("DB_TYPE"),
