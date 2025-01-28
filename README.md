@@ -8,14 +8,14 @@ The following parameters must be set as environment variables:
 
 **MySQL**:
 
-- DB_TYPE = "mysql"
-- DB_NETWORK = <your_database_network>
-- DB_HOST = <your_database_host>
-- DB_PORT = <your_database_port>
-- DB_USER = <your_database_username>
-- DB_PASSWORD = <your_database_user_password>
-- MIGRATION_DIR = <your_directory_with_migration_files>
+- `DB_TYPE`: `"mysql"` for MySQL
+- `DB_NETWORK`: the used network (e. g. `"tcp"`)
+- `DB_HOST`: the host on which MySQL runs
+- `DB_PORT`: the port on which MySQL listens
+- `DB_USER`: the username of the user
+- `DB_PASSWORD`: the password of the user
+- `MIGRATION_DIR`: the directory path of the migration files
 
-These can be defined inside a file of name `.env`.
+These can be defined inside a file of name `.env` in the root folder.
 
-Every sql-file inside `MIGRATION_DIR` is executed sequentially in alphabetical order of the files.
+Every sql-file inside `MIGRATION_DIR` is executed sequentially in alphabetical order of the file names.
