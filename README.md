@@ -1,8 +1,12 @@
 # Migrater
 
-Migrater is a leightweight command-line tool to perform migrations from sql-files.
+Migrater is a leightweight command-line tool to perform migrations in the development process from sql files.
 
 ## Usage
+
+Migrater executes the contents of every file of a specified directory in alphanumerical order of the file names on a specified database. Therefore it is recommended to only place sql files in that directory and to give every file name an ordering prefix.
+
+Examples for the usage of sql files for migrations can be found in the directories `migrations_mysql` and `migrations_sqlite`. Thereby the directories are reflecting according example migrations for MySQL and SQLite.
 
 The following parameters must be set as environment variables or inside the file `.env` in the root folder:
 
@@ -15,15 +19,13 @@ The following parameters must be set as environment variables or inside the file
 - `DB_DATABASE`: the name of the database to access
 - `DB_USER`: the username of the user
 - `DB_PASSWORD`: the password of the user
-- `MIGRATION_DIR`: the path to the directory of the migration files
+- `MIGRATION_DIR`: the path to the directory of the sql files
 
 **SQLite**:
 
 - `DB_TYPE`: `"sqlite"` for SQLite
 - `DB_DATABASE`: the path to the database file to access
-- `MIGRATION_DIR`: the path to the directory of the migration files
-
-Every sql-file inside `MIGRATION_DIR` is executed sequentially in alphanumerical order of the file names. Therefore it is recommended to give every file name an ordering prefix.
+- `MIGRATION_DIR`: the path to the directory of the sql files
 
 ## Build
 
