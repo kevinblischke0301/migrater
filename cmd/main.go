@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Env struct {
@@ -18,6 +19,7 @@ type Env struct {
 	DBNetwork    string
 	DBHost       string
 	DBPort       string
+	DBDatabase   string
 	DBUser       string
 	DBPassword   string
 	MigrationDir string
@@ -29,12 +31,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-
 	env := Env{
 		DBType:       os.Getenv("DB_TYPE"),
 		DBNetwork:    os.Getenv("DB_NETWORK"),
 		DBHost:       os.Getenv("DB_HOST"),
 		DBPort:       os.Getenv("DB_PORT"),
+		DBDatabase:   os.Getenv("DB_DATABASE"),
 		DBUser:       os.Getenv("DB_USER"),
 		DBPassword:   os.Getenv("DB_PASSWORD"),
 		MigrationDir: os.Getenv("MIGRATION_DIR"),
@@ -94,6 +96,11 @@ func GetDB(env *Env) (*sql.DB, error) {
 		cfg.Passwd = env.DBPassword
 
 		db, err := sql.Open("mysql", cfg.FormatDSN())
+
+		return db, err
+
+	case "sqlite":
+		db, err := sql.Open("sqlite3", env.DBDatabase)
 
 		return db, err
 
