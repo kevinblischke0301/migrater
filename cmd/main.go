@@ -13,24 +13,44 @@ import (
 	"github.com/joho/godotenv"
 )
 
+type Env struct {
+	DBType       string
+	DBNetwork    string
+	DBHost       string
+	DBPort       string
+	DBUser       string
+	DBPassword   string
+	MigrationDir string
+}
+
 func main() {
 	err := godotenv.Load()
 	AbortIf(err)
 
-	db, err := GetDB(GetEnv("DB_TYPE"))
+	env := Env{
+		DBType:       os.Getenv("DB_TYPE"),
+		DBNetwork:    os.Getenv("DB_NETWORK"),
+		DBHost:       os.Getenv("DB_HOST"),
+		DBPort:       os.Getenv("DB_PORT"),
+		DBUser:       os.Getenv("DB_USER"),
+		DBPassword:   os.Getenv("DB_PASSWORD"),
+		MigrationDir: os.Getenv("MIGRATION_DIR"),
+	}
+
+	db, err := GetDB(&env)
 	AbortIf(err)
 
 	err = db.Ping()
 	AbortIf(err)
 
-	entries, err := os.ReadDir(GetEnv("MIGRATION_DIR"))
+	entries, err := os.ReadDir(env.MigrationDir)
 	AbortIf(err)
 
 	for _, entry := range entries {
 		info, err := entry.Info()
 		AbortIf(err)
 
-		file, err := os.Open(fmt.Sprintf("%s%s", GetEnv("MIGRATION_DIR"), info.Name()))
+		file, err := os.Open(fmt.Sprintf("%s/%s", env.MigrationDir, info.Name()))
 		AbortIf(err)
 
 		content, err := io.ReadAll(file)
@@ -46,33 +66,23 @@ func main() {
 	fmt.Println("Migration completed.")
 }
 
-func GetDB(dbType string) (*sql.DB, error) {
-	switch dbType {
+func GetDB(env *Env) (*sql.DB, error) {
+	switch env.DBType {
 
 	case "mysql":
 		cfg := mysql.NewConfig()
-		cfg.Net = GetEnv("DB_NETWORK")
-		cfg.Addr = fmt.Sprintf("%s:%s", GetEnv("DB_HOST"), GetEnv("DB_PORT"))
-		cfg.User = GetEnv("DB_USER")
-		cfg.Passwd = GetEnv("DB_PASSWORD")
+		cfg.Net = env.DBNetwork
+		cfg.Addr = fmt.Sprintf("%s:%s", env.DBHost, env.DBPort)
+		cfg.User = env.DBUser
+		cfg.Passwd = env.DBPassword
 
 		db, err := sql.Open("mysql", cfg.FormatDSN())
 
 		return db, err
 
 	default:
-		return nil, errors.New(fmt.Sprintf("%s isn't a supported database type", dbType))
+		return nil, errors.New(fmt.Sprintf("%s isn't a supported database type", env.DBType))
 	}
-}
-
-func GetEnv(key string) string {
-	env, ok := os.LookupEnv(key)
-
-	if !ok {
-		log.Fatal(fmt.Sprintf("No environment variable \"%s\" set.", key))
-	}
-
-	return env
 }
 
 func AbortIf(err error) {
