@@ -4,7 +4,7 @@ Migrater is a leightweight command-line tool to perform migrations in the develo
 
 ## Usage
 
-Migrater executes the contents of every file of a specified directory in alphanumerical order of the file names on a specified database. Therefore it is recommended to only place sql files in that directory and to give every file name an ordering prefix.
+Migrater executes the contents of every file of a specified directory in alphanumerical order of the file names on a specified database. Therefore it is recommended to only place sql files in that directory and to give every file name an ordering prefix. There should also exist statements to rollback migrations when the same migration is applied multiple times, because Migrater tries to execute all sql files again, regardless of wether they were executed and have taken effect already.
 
 Examples for the usage of sql files for migrations can be found in the directories `migrations_mysql` and `migrations_sqlite`. Thereby the directories are reflecting according example migrations for MySQL and SQLite.
 
