@@ -1,4 +1,4 @@
-USE `kraut_und_rueben`;
+USE `example`;
 
 CREATE TABLE `foo_bar` (
     `foo_id` INT NOT NULL,

@@ -1,4 +1,4 @@
-USE `kraut_und_rueben`;
+USE `example`;
 
 CREATE TABLE `bar` (
     `id` INT NOT NULL AUTO_INCREMENT,
