@@ -1,29 +1,17 @@
 package main
 
 import (
-	"database/sql"
-	"errors"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	_ "github.com/mattn/go-sqlite3"
-)
 
-type Env struct {
-	DBType       string
-	DBNetwork    string
-	DBHost       string
-	DBPort       string
-	DBDatabase   string
-	DBUser       string
-	DBPassword   string
-	MigrationDir string
-}
+	"github.com/kevinblischke0301/migrater/internal/db"
+	"github.com/kevinblischke0301/migrater/internal/env"
+)
 
 func main() {
 	err := godotenv.Load()
@@ -31,7 +19,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	env := Env{
+	env := env.Env{
 		DBType:       os.Getenv("DB_TYPE"),
 		DBNetwork:    os.Getenv("DB_NETWORK"),
 		DBHost:       os.Getenv("DB_HOST"),
@@ -42,7 +30,7 @@ func main() {
 		MigrationDir: os.Getenv("MIGRATION_DIR"),
 	}
 
-	db, err := GetDB(&env)
+	db, err := db.GetDB(&env)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -84,28 +72,4 @@ func main() {
 	}
 
 	fmt.Println("Migration completed.")
-}
-
-func GetDB(env *Env) (*sql.DB, error) {
-	switch env.DBType {
-
-	case "mysql":
-		cfg := mysql.NewConfig()
-		cfg.Net = env.DBNetwork
-		cfg.Addr = fmt.Sprintf("%s:%s", env.DBHost, env.DBPort)
-		cfg.User = env.DBUser
-		cfg.Passwd = env.DBPassword
-
-		db, err := sql.Open("mysql", cfg.FormatDSN())
-
-		return db, err
-
-	case "sqlite":
-		db, err := sql.Open("sqlite3", env.DBDatabase)
-
-		return db, err
-
-	default:
-		return nil, errors.New(fmt.Sprintf("%s isn't a supported database type", env.DBType))
-	}
 }

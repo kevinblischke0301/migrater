@@ -38,7 +38,7 @@ Migrater can be build with the Go CLI. This requires Go version 1.23.5 or higher
 To build Migrater with the Go CLI, run the following command in the root folder of the project:
 
 ```bash
-go build -o ./bin/migrater.exe ./cmd/main.go
+go build -o ./bin/migrater.exe ./cmd/main/main.go
 ```
 
 The executable Migrater file can then be found in the directory `bin` with the name `migrater.exe`.
@@ -46,7 +46,7 @@ The executable Migrater file can then be found in the directory `bin` with the n
 To only run Migrater without building an executable file with the Go CLI, run the following command in the root folder of the project:
 
 ```bash
-go run ./cmd/main.go
+go run ./cmd/main/main.go
 ```
 
 ### Building with Makefile
