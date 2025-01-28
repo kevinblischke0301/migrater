@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -16,13 +17,7 @@ func main() {
 	err := godotenv.Load()
 	AbortIf(err)
 
-	cfg := mysql.NewConfig()
-	cfg.Net = GetEnv("DB_NETWORK")
-	cfg.Addr = fmt.Sprintf("%s:%s", GetEnv("DB_HOST"), GetEnv("DB_PORT"))
-	cfg.User = GetEnv("DB_USER")
-	cfg.Passwd = GetEnv("DB_PASSWORD")
-
-	db, err := sql.Open("mysql", cfg.FormatDSN())
+	db, err := GetDB(GetEnv("DB_TYPE"))
 	AbortIf(err)
 
 	err = db.Ping()
@@ -49,6 +44,25 @@ func main() {
 	}
 
 	fmt.Println("Migration completed.")
+}
+
+func GetDB(dbType string) (*sql.DB, error) {
+	switch dbType {
+
+	case "mysql":
+		cfg := mysql.NewConfig()
+		cfg.Net = GetEnv("DB_NETWORK")
+		cfg.Addr = fmt.Sprintf("%s:%s", GetEnv("DB_HOST"), GetEnv("DB_PORT"))
+		cfg.User = GetEnv("DB_USER")
+		cfg.Passwd = GetEnv("DB_PASSWORD")
+
+		db, err := sql.Open("mysql", cfg.FormatDSN())
+
+		return db, err
+
+	default:
+		return nil, errors.New(fmt.Sprintf("%s isn't a supported database type", dbType))
+	}
 }
 
 func GetEnv(key string) string {
