@@ -14,7 +14,7 @@ import (
 
 func main() {
 	err := godotenv.Load()
-	Abort(err)
+	AbortIf(err)
 
 	cfg := mysql.NewConfig()
 	cfg.Net = GetEnv("DB_NETWORK")
@@ -23,28 +23,28 @@ func main() {
 	cfg.Passwd = GetEnv("DB_PASSWORD")
 
 	db, err := sql.Open("mysql", cfg.FormatDSN())
-	Abort(err)
+	AbortIf(err)
 
 	err = db.Ping()
-	Abort(err)
+	AbortIf(err)
 
 	entries, err := os.ReadDir(GetEnv("MIGRATION_DIR"))
-	Abort(err)
+	AbortIf(err)
 
 	for _, entry := range entries {
 		info, err := entry.Info()
-		Abort(err)
+		AbortIf(err)
 
 		file, err := os.Open(fmt.Sprintf("%s%s", GetEnv("MIGRATION_DIR"), info.Name()))
-		Abort(err)
+		AbortIf(err)
 
 		content, err := io.ReadAll(file)
-		Abort(err)
+		AbortIf(err)
 
 		queries := strings.Split(string(content), ";")
 		for i := 0; i < len(queries)-1; i++ {
 			_, err = db.Exec(queries[i] + ";")
-			Abort(err)
+			AbortIf(err)
 		}
 	}
 
@@ -61,7 +61,7 @@ func GetEnv(key string) string {
 	return env
 }
 
-func Abort(err error) {
+func AbortIf(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
