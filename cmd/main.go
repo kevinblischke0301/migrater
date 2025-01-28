@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -40,8 +41,11 @@ func main() {
 		content, err := io.ReadAll(file)
 		Abort(err)
 
-		_, err = db.Exec(string(content))
-		Abort(err)
+		queries := strings.Split(string(content), ";")
+		for i := 0; i < len(queries)-1; i++ {
+			_, err = db.Exec(queries[i] + ";")
+			Abort(err)
+		}
 	}
 
 	fmt.Println("Migration completed.")
