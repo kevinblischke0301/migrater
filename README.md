@@ -26,15 +26,15 @@ Migrater uses environment variables for configuration. These can be set inside t
 - `DB_DATABASE`: the name of the database to access
 - `DB_USER`: the username of the user
 - `DB_PASSWORD`: the password of the user
-- `MIGRATION_DIR`: the path to the directory of the sql files for migrations
-- `ROLLBACK_DIR`: the path to the directory of the sql files for rollbacks (optional)
+- `MIGRATION_DIR`: the path to the directory of the sql files for migrations (only for migrations)
+- `ROLLBACK_DIR`: the path to the directory of the sql files for rollbacks (only for rollbacks)
 
 **SQLite**:
 
 - `DB_TYPE`: `"sqlite"` for SQLite
 - `DB_DATABASE`: the path to the database file to access
-- `MIGRATION_DIR`: the path to the directory of the sql files for migrations
-- `ROLLBACK_DIR`: the path to the directory of the sql files for rollbacks (optional)
+- `MIGRATION_DIR`: the path to the directory of the sql files for migrations (only for migrations)
+- `ROLLBACK_DIR`: the path to the directory of the sql files for rollbacks (only for rollbacks)
 
 ### Execution
 
@@ -63,6 +63,8 @@ To only run Migrater without building an executable file with the Go CLI, run th
 ```bash
 go run ./cmd/main/main.go
 ```
+
+Thereby an according command-line flag must be appended to that command.
 
 ### Building with Makefile
 
