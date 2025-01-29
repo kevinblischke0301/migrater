@@ -5,6 +5,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -53,7 +54,8 @@ func main() {
 		}
 
 		fileName := info.Name()
-		file, err := os.Open(fmt.Sprintf("%s/%s", env.MigrationDir, fileName))
+		pathName := filepath.Join(env.MigrationDir, fileName)
+		file, err := os.Open(pathName)
 		if err != nil {
 			log.Fatal(fmt.Sprintf("Error while opening file \"%s\":\n%s", fileName, err))
 		}
