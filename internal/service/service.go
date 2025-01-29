@@ -28,15 +28,14 @@ func Migrate(dir string, db *sql.DB) {
 
 func Rollback(dir string, db *sql.DB) {
 	queryFiles := readQueries(dir)
-	queryFilesLen := len(queryFiles)
 
-	for i := queryFilesLen - 1; i >= 0; i-- {
+	for i := len(queryFiles) - 1; i >= 0; i-- {
 		for _, query := range queryFiles[i] {
 			_, err := db.Exec(query)
 
 			if err != nil {
 				log.Fatal(fmt.Sprintf(
-					"Error while performing rollback file %d:\n%s", queryFilesLen - i, err,
+					"Error while performing rollback file %d:\n%s", i, err,
 				))
 			}
 		}
