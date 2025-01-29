@@ -50,5 +50,8 @@ func main() {
 	case arg.MIGRATE:
 		service.Migrate(env.MigrationDir, db)
 		fmt.Println("Migration completed.")
+	case arg.ROLLBACK:
+		service.Migrate(env.MigrationDir, db)
+		fmt.Println("Rollback completed.")
 	}
 }
