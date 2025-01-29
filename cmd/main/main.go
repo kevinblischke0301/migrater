@@ -10,10 +10,16 @@ import (
 	"github.com/kevinblischke0301/migrater/internal/db"
 	"github.com/kevinblischke0301/migrater/internal/env"
 	"github.com/kevinblischke0301/migrater/internal/service"
+	"github.com/kevinblischke0301/migrater/internal/arg"
 )
 
 func main() {
-	err := godotenv.Load()
+	command, err := arg.ParseArg(os.Args)
+	if err != nil {
+		log.Fatal(fmt.Sprintf("Error while parsing command-line arguments:\n%s", err))
+	}
+
+	err = godotenv.Load()
 	if err != nil && !os.IsNotExist(err) {
 		log.Fatal(fmt.Sprintf("Error while reading \".env\" file:\n%s", err))
 	}
@@ -40,7 +46,9 @@ func main() {
 		log.Fatal(fmt.Sprintf("Error while connecting to database:\n%s", err))
 	}
 
-	service.Migrate(env.MigrationDir, db)
-
-	fmt.Println("Migration completed.")
+	switch command {
+	case arg.MIGRATE:
+		service.Migrate(env.MigrationDir, db)
+		fmt.Println("Migration completed.")
+	}
 }
