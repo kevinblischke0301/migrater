@@ -62,9 +62,9 @@ func main() {
 			log.Fatal(err)
 		}
 
-		queries := strings.Split(string(content), ";")
+		queries := strings.SplitAfter(string(content), ";")
 		for i := 0; i < len(queries)-1; i++ {
-			_, err = db.Exec(queries[i] + ";")
+			_, err = db.Exec(queries[i])
 			if err != nil {
 				log.Fatal(err)
 			}
