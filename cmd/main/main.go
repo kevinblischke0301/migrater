@@ -16,7 +16,7 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil && !os.IsNotExist(err) {
-		log.Fatal(err)
+		log.Fatal(fmt.Sprintf("Error while reading \".env\" file:\n%s", err))
 	}
 
 	env := env.Env{
@@ -32,41 +32,43 @@ func main() {
 
 	db, err := db.GetDB(&env)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Sprintf("Error while opening database:\n%s", err))
 	}
 	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Sprintf("Error while connecting to database:\n%s", err))
 	}
 
 	entries, err := os.ReadDir(env.MigrationDir)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(fmt.Sprintf("Error while reading migrations directory:\n%s", err))
 	}
 
 	for _, entry := range entries {
 		info, err := entry.Info()
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Sprintf("Error while reading file informations:\n%s", err))
 		}
 
-		file, err := os.Open(fmt.Sprintf("%s/%s", env.MigrationDir, info.Name()))
+		fileName := info.Name()
+		file, err := os.Open(fmt.Sprintf("%s/%s", env.MigrationDir, fileName))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Sprintf("Error while opening file \"%s\":\n%s", fileName, err))
 		}
 
-		content, err := io.ReadAll(file)
+		fileContent, err := io.ReadAll(file)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal(fmt.Sprintf("Error while reading file \"%s\":\n%s", fileName, err))
 		}
 
-		queries := strings.SplitAfter(string(content), ";")
+		queries := strings.SplitAfter(string(fileContent), ";")
 		for i := 0; i < len(queries)-1; i++ {
 			_, err = db.Exec(queries[i])
+
 			if err != nil {
-				log.Fatal(err)
+				log.Fatal(fmt.Sprintf("Error while performing migration file \"%s\":\n%s", fileName, err))
 			}
 		}
 	}
