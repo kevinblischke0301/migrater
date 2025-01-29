@@ -10,6 +10,7 @@ type Command int8
 
 const (
 	MIGRATE Command = iota
+	ROLLBACK
 )
 
 func ParseArg(args []string) (Command, error) {
@@ -30,6 +31,8 @@ func getCommand(arg string) (Command, error) {
 	switch strings.ToLower(arg) {
 	case "", "--migrate", "-migrate", "migrate":
 		return MIGRATE, nil
+	case "--rollback", "-rollback", "rollback":
+		return ROLLBACK, nil
 	default:
 		return -1, errors.New(fmt.Sprintf("the command-line argument \"%s\" isn't valid", arg))
 	}
