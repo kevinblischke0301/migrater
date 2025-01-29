@@ -18,9 +18,9 @@ func ParseArg(args []string) (Command, error) {
 	if n == 1 {
 		return MIGRATE, nil
 	} else if n < 1 {
-		return -1, errors.New("to few command-line arguments were given")
+		return -1, errors.New("too few command-line arguments were given")
 	} else if n > 2 {
-		return -1, errors.New("to many command-line arguments were given")
+		return -1, errors.New("too many command-line arguments were given")
 	} else {
 		return getCommand(args[1])
 	}
