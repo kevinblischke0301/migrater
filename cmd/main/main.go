@@ -33,6 +33,7 @@ func main() {
 		DBUser:       os.Getenv("DB_USER"),
 		DBPassword:   os.Getenv("DB_PASSWORD"),
 		MigrationDir: os.Getenv("MIGRATION_DIR"),
+		RollbackDir: os.Getenv("ROLLBACK_DIR"),
 	}
 
 	db, err := db.GetDB(&env)
@@ -51,7 +52,7 @@ func main() {
 		service.Migrate(env.MigrationDir, db)
 		fmt.Println("Migration completed.")
 	case arg.ROLLBACK:
-		service.Migrate(env.MigrationDir, db)
+		service.Rollback(env.RollbackDir, db)
 		fmt.Println("Rollback completed.")
 	}
 }

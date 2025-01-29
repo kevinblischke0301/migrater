@@ -1,0 +1,2 @@
+ALTER TABLE `foo`
+ADD `number` FLOAT NOT NULL;

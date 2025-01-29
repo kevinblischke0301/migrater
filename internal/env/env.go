@@ -9,4 +9,5 @@ type Env struct {
 	DBUser       string
 	DBPassword   string
 	MigrationDir string
+	RollbackDir  string
 }
