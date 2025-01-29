@@ -78,10 +78,14 @@ make build
 
 The executable Migrater file can then be found in the directory `bin` with the name `migrater.exe`.
 
-To build and directly run Migrate, run the following command in the root folder of the project:
+To build and directly run Migrate, run one of the following according commands in the root folder of the project to perform a migration or a rollback:
 
 ```bash
-make run
+make migrate
+```
+
+```bash
+make rollback
 ```
 
 Thereby the executable Migrater file is only rebuild when the source code was changed since the last build process.
