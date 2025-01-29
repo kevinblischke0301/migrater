@@ -7,10 +7,10 @@ import (
 
 	"github.com/joho/godotenv"
 
+	"github.com/kevinblischke0301/migrater/internal/arg"
 	"github.com/kevinblischke0301/migrater/internal/db"
 	"github.com/kevinblischke0301/migrater/internal/env"
 	"github.com/kevinblischke0301/migrater/internal/service"
-	"github.com/kevinblischke0301/migrater/internal/arg"
 )
 
 func main() {
@@ -33,7 +33,7 @@ func main() {
 		DBUser:       os.Getenv("DB_USER"),
 		DBPassword:   os.Getenv("DB_PASSWORD"),
 		MigrationDir: os.Getenv("MIGRATION_DIR"),
-		RollbackDir: os.Getenv("ROLLBACK_DIR"),
+		RollbackDir:  os.Getenv("ROLLBACK_DIR"),
 	}
 
 	db, err := db.GetDB(&env)
