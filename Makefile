@@ -1,11 +1,11 @@
 migrate: build
-	@./bin/migrater.exe --migrate
+	@cd $(dir $(lastword $(MAKEFILE_LIST))) && ./bin/migrater.exe --migrate
 
 rollback: build
-	@./bin/migrater.exe --rollback
+	@cd $(dir $(lastword $(MAKEFILE_LIST))) && ./bin/migrater.exe --rollback
 
 build:
-	@go build -o ./bin/migrater.exe ./cmd/main/main.go
+	@cd $(dir $(lastword $(MAKEFILE_LIST))) && go build -o ./bin/migrater.exe ./cmd/main/main.go
 
 clean:
-	@rm ./bin/migrater.exe
+	@cd $(dir $(lastword $(MAKEFILE_LIST))) && rm -f ./bin/migrater.exe
