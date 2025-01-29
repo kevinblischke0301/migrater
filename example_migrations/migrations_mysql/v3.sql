@@ -1,7 +1,5 @@
 USE `example`;
 
-DROP TABLE IF EXISTS `foo_bar`;
-
 CREATE TABLE `foo_bar` (
     `foo_id` INT NOT NULL,
     `bar_id` INT NOT NULL,
